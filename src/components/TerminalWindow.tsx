@@ -20,7 +20,8 @@ import {
   Mail, 
   Star,
   Maximize2,
-  Minimize2
+  Minimize2,
+  Play
 } from 'lucide-react';
 
 interface TerminalWindowProps {
@@ -57,19 +58,21 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
   const terminalEndRef = useRef<HTMLDivElement | null>(null);
 
   const availableCommands = [
-    'help', 'about', 'projects', 'skills', 'contact', 
+    'help', 'about', 'projects', 'try', 'skills', 'contact', 
     'theme', 'matrix', 'crt', 'audio', 'gui', 'clear', 
     'banner', 'whoami', 'history', 'date', 'sudo'
   ];
 
   const quickPills = [
     { label: 'help', cmd: 'help' },
-    { label: 'about', cmd: 'about' },
     { label: 'projects', cmd: 'projects' },
+    { label: '🌸 Try Kawai', cmd: 'try kawai' },
+    { label: '🎬 Try AnimeFlix', cmd: 'try anime' },
+    { label: '🤖 Try Siri-GPT', cmd: 'try siri' },
+    { label: '🖤 Try Haruno', cmd: 'try haruno' },
     { label: 'skills', cmd: 'skills' },
+    { label: 'about', cmd: 'about' },
     { label: 'contact', cmd: 'contact' },
-    { label: 'matrix', cmd: 'matrix' },
-    { label: 'theme', cmd: 'theme' },
     { label: 'GUI view', cmd: 'gui' },
     { label: 'clear', cmd: 'clear' },
   ];
@@ -79,20 +82,27 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
     const welcomeOutput = (
       <div className="space-y-3 mb-4">
         <pre 
-          className="font-mono text-xs md:text-sm leading-none overflow-x-auto select-none font-bold" 
+          className="font-mono text-[10px] sm:text-xs md:text-sm leading-none overflow-x-auto select-none font-bold py-1" 
           style={{ color: theme.accent }}
         >
           {ASCII_BANNER}
         </pre>
-        <div className="border-l-2 pl-3 py-1 space-y-1 text-xs md:text-sm font-mono" style={{ borderColor: theme.accent }}>
+        <div className="border-l-2 pl-3 py-1 space-y-1.5 text-xs sm:text-sm font-mono" style={{ borderColor: theme.accent }}>
           <p className="text-white font-semibold">
             Welcome to <span style={{ color: theme.accent }}>{USER_PROFILE.name}'s</span> Interactive Terminal Portfolio!
           </p>
           <p className="text-gray-300">
             Role: <span className="text-gray-100">{USER_PROFILE.role}</span>
           </p>
-          <p className="text-gray-400">
-            Type <span className="font-bold underline" style={{ color: theme.accent }}>help</span> to list commands or tap any quick action below.
+          <div className="flex flex-wrap items-center gap-1.5 pt-1 text-xs">
+            <span className="text-gray-400">🔥 Pinned Live Apps:</span>
+            <button onClick={() => executeCommand('try kawai')} className="text-emerald-400 underline font-bold">Kawai</button> • 
+            <button onClick={() => executeCommand('try anime')} className="text-emerald-400 underline font-bold">Sakura-Flix</button> • 
+            <button onClick={() => executeCommand('try siri')} className="text-emerald-400 underline font-bold">Siri-GPT</button> • 
+            <button onClick={() => executeCommand('try haruno')} className="text-emerald-400 underline font-bold">Haruno</button>
+          </div>
+          <p className="text-gray-400 text-xs pt-0.5">
+            Type <span className="font-bold underline" style={{ color: theme.accent }}>help</span> or tap any quick action below.
           </p>
         </div>
       </div>
@@ -136,18 +146,19 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
       case 'help':
       case '?':
         outputNode = (
-          <div className="space-y-3 my-2 text-xs md:text-sm font-mono">
+          <div className="space-y-3 my-2 text-xs sm:text-sm font-mono">
             <p className="font-bold text-white border-b border-white/10 pb-1">
               🚀 Available Commands & Utilities:
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3">
               <div>
                 <p className="text-[11px] uppercase tracking-wider font-bold mb-1" style={{ color: theme.accent }}>
-                  — Navigation & Profile —
+                  — Navigation & Showcase —
                 </p>
                 <div className="space-y-1">
+                  <p><span className="font-bold text-white">projects</span> (or <span className="text-gray-400">ls</span>) - Showcase pinned projects & live links</p>
+                  <p><span className="font-bold text-white">try [name]</span> - Launch live web demo directly</p>
                   <p><span className="font-bold text-white">about</span> - Biography, background & facts</p>
-                  <p><span className="font-bold text-white">projects</span> (or <span className="text-gray-400">ls</span>) - Showcase of pinned works</p>
                   <p><span className="font-bold text-white">skills</span> - Interactive technical capability bars</p>
                   <p><span className="font-bold text-white">contact</span> - Email, GitHub & social handles</p>
                   <p><span className="font-bold text-white">whoami</span> - Current user & environment</p>
@@ -178,12 +189,12 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
 
       case 'about':
         outputNode = (
-          <div className="space-y-3 my-2 text-xs md:text-sm font-mono border-l-2 pl-3" style={{ borderColor: theme.accent }}>
+          <div className="space-y-3 my-2 text-xs sm:text-sm font-mono border-l-2 pl-3" style={{ borderColor: theme.accent }}>
             <div className="flex items-center gap-3">
               <img 
                 src={USER_PROFILE.avatar} 
                 alt="Avatar" 
-                className="w-12 h-12 rounded-full border border-white/20"
+                className="w-12 h-12 rounded-full border border-white/20 shrink-0"
               />
               <div>
                 <h4 className="font-bold text-white text-base">{USER_PROFILE.name} (@{USER_PROFILE.handle})</h4>
@@ -205,26 +216,80 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
         );
         break;
 
+      case 'try':
+      case 'open':
+        if (args.length === 0) {
+          outputNode = (
+            <div className="space-y-2 my-2 text-xs sm:text-sm font-mono">
+              <p className="font-bold text-white">🚀 Quick Launch Live Project Demos:</p>
+              <div className="flex flex-wrap gap-2 pt-1">
+                {PINNED_PROJECTS.filter(p => p.liveUrl).map(p => (
+                  <a
+                    key={p.id}
+                    href={p.liveUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all hover:scale-105 shadow-md"
+                    style={{ background: theme.accent, color: theme.bg }}
+                  >
+                    <Play size={11} fill="currentColor" />
+                    <span>{p.name} ↗</span>
+                  </a>
+                ))}
+              </div>
+              <p className="text-gray-400 text-xs mt-1">Usage: <code className="text-white">try kawai</code>, <code className="text-white">try anime</code>, <code className="text-white">try siri</code>, <code className="text-white">try haruno</code></p>
+            </div>
+          );
+        } else {
+          const target = args[0].toLowerCase();
+          const match = PINNED_PROJECTS.find(p => 
+            p.id.toLowerCase().includes(target) || 
+            p.name.toLowerCase().includes(target) ||
+            (target === 'anime' && p.id.includes('sakura-flix')) ||
+            (target === 'flix' && p.id.includes('sakura-flix'))
+          );
+          if (match && match.liveUrl) {
+            window.open(match.liveUrl, '_blank');
+            outputNode = (
+              <div className="text-xs sm:text-sm font-mono space-y-1">
+                <p className="text-emerald-400">
+                  Opening <span className="font-bold text-white">{match.name}</span> in a new tab... 🚀
+                </p>
+                <a href={match.liveUrl} target="_blank" rel="noreferrer" className="underline text-xs" style={{ color: theme.accent }}>
+                  {match.liveUrl}
+                </a>
+              </div>
+            );
+          } else {
+            outputNode = (
+              <p className="text-xs sm:text-sm font-mono text-rose-400">
+                Project '{args[0]}' not recognized. Try: <span className="text-white">kawai, anime, siri, haruno</span>
+              </p>
+            );
+          }
+        }
+        break;
+
       case 'projects':
       case 'ls':
       case 'proj':
         outputNode = (
-          <div className="space-y-4 my-3 text-xs md:text-sm font-mono">
-            <div className="flex items-center justify-between border-b border-white/10 pb-2">
+          <div className="space-y-4 my-3 text-xs sm:text-sm font-mono">
+            <div className="flex flex-wrap items-center justify-between gap-1 border-b border-white/10 pb-2">
               <p className="font-bold text-white">📁 Showcase & Pinned Projects ({PINNED_PROJECTS.length}):</p>
-              <span className="text-[11px] text-gray-400">Click links to inspect repo or live demo</span>
+              <span className="text-[11px] text-gray-400">Click links to try live app or view repo</span>
             </div>
 
             <div className="grid grid-cols-1 gap-3">
               {PINNED_PROJECTS.map((proj: Project) => (
                 <div 
                   key={proj.id} 
-                  className="p-3.5 rounded-xl border transition-all hover:border-white/40"
+                  className="p-3.5 sm:p-4 rounded-xl border transition-all hover:border-white/40"
                   style={{ background: 'rgba(255, 255, 255, 0.03)', borderColor: theme.border }}
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-1.5">
                     <div className="flex items-center gap-2">
-                      <span className="font-bold text-base text-white">{proj.name}</span>
+                      <span className="font-bold text-sm sm:text-base text-white">{proj.name}</span>
                       {proj.pinned && (
                         <span className="flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: theme.badgeBg, color: theme.badgeText }}>
                           <Star size={10} fill="currentColor" /> Pinned
@@ -244,30 +309,31 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
                     ))}
                   </div>
 
-                  <div className="flex flex-wrap items-center gap-3 pt-2 border-t border-white/10">
-                    <a
-                      href={proj.githubUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded border hover:bg-white/10 transition-colors"
-                      style={{ borderColor: theme.border, color: theme.text }}
-                    >
-                      <Github size={13} />
-                      <span>GitHub</span>
-                    </a>
-
+                  <div className="flex flex-wrap items-center gap-2.5 pt-2 border-t border-white/10">
                     {proj.liveUrl && (
                       <a
                         href={proj.liveUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded transition-colors"
+                        className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg transition-all hover:scale-105 shadow-md"
                         style={{ background: theme.accent, color: theme.bg }}
                       >
-                        <ExternalLink size={13} />
-                        <span>Live Demo</span>
+                        <Play size={12} fill="currentColor" />
+                        <span>Try Now 🚀</span>
+                        <ExternalLink size={11} />
                       </a>
                     )}
+
+                    <a
+                      href={proj.githubUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg border hover:bg-white/10 transition-colors"
+                      style={{ borderColor: theme.border, color: theme.text }}
+                    >
+                      <Github size={13} />
+                      <span>GitHub</span>
+                    </a>
                   </div>
                 </div>
               ))}
@@ -278,12 +344,12 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
 
       case 'skills':
         outputNode = (
-          <div className="space-y-4 my-2 text-xs md:text-sm font-mono">
+          <div className="space-y-4 my-2 text-xs sm:text-sm font-mono">
             <p className="font-bold text-white border-b border-white/10 pb-1">
               ⚡ Technical Proficiency & Skills Matrix:
             </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
               {SKILL_CATEGORIES.map((cat, idx) => (
                 <div key={idx} className="p-3 rounded-xl border bg-white/5 space-y-2.5" style={{ borderColor: theme.border }}>
                   <p className="font-bold text-white text-xs uppercase tracking-wide flex items-center gap-2" style={{ color: theme.accent }}>
@@ -318,7 +384,7 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
       case 'contact':
       case 'socials':
         outputNode = (
-          <div className="space-y-3 my-2 text-xs md:text-sm font-mono border-l-2 pl-3" style={{ borderColor: theme.accent }}>
+          <div className="space-y-3 my-2 text-xs sm:text-sm font-mono border-l-2 pl-3" style={{ borderColor: theme.accent }}>
             <p className="font-bold text-white">📫 Connect with {USER_PROFILE.name}:</p>
             <div className="space-y-1.5">
               <p>
@@ -333,10 +399,6 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
                   {USER_PROFILE.github}
                 </a>
               </p>
-              <p>
-                <span className="text-gray-400">Portfolio: </span>
-                <span className="text-emerald-400 font-bold">d4rxh.netlify.app</span>
-              </p>
             </div>
             <p className="text-xs text-gray-400 italic pt-1">
               "Feel free to reach out for project inquiries, open source collaborations, or just to say hi!"
@@ -349,7 +411,7 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
         if (args.length === 0) {
           const themeList = Object.keys(THEMES) as ThemeMode[];
           outputNode = (
-            <div className="space-y-2 my-2 text-xs md:text-sm font-mono">
+            <div className="space-y-2 my-2 text-xs sm:text-sm font-mono">
               <p className="font-bold text-white">🎨 Active Theme: <span style={{ color: theme.accent }}>{theme.name}</span></p>
               <p className="text-gray-300">Available Themes:</p>
               <div className="flex flex-wrap gap-2 pt-1">
@@ -368,41 +430,41 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
                   </button>
                 ))}
               </div>
-              <p className="text-[11px] text-gray-400">Usage: <code className="text-white">theme matrix</code>, <code className="text-white">theme sakura</code>, <code className="text-white">theme cyberpunk</code>, etc.</p>
+              <p className="text-[11px] text-gray-400">Usage: <code className="text-white">theme matrix</code>, <code className="text-white">theme sakura</code>, etc.</p>
             </div>
           );
         } else {
           const chosen = args[0].toLowerCase() as ThemeMode;
           if (THEMES[chosen]) {
             onThemeChange(chosen);
-            outputNode = <p className="text-xs md:text-sm font-mono text-emerald-400">Switched theme to {THEMES[chosen].name}!</p>;
+            outputNode = <p className="text-xs sm:text-sm font-mono text-emerald-400">Switched theme to {THEMES[chosen].name}!</p>;
           } else {
             sounds.playErrorBeep();
-            outputNode = <p className="text-xs md:text-sm font-mono text-rose-400">Theme '{args[0]}' not recognized. Try: {Object.keys(THEMES).join(', ')}</p>;
+            outputNode = <p className="text-xs sm:text-sm font-mono text-rose-400">Theme '{args[0]}' not recognized. Try: {Object.keys(THEMES).join(', ')}</p>;
           }
         }
         break;
 
       case 'matrix':
         onToggleMatrix();
-        outputNode = <p className="text-xs md:text-sm font-mono text-emerald-400">Matrix digital rain {matrixEnabled ? 'disabled' : 'enabled'}!</p>;
+        outputNode = <p className="text-xs sm:text-sm font-mono text-emerald-400">Matrix digital rain {matrixEnabled ? 'disabled' : 'enabled'}!</p>;
         break;
 
       case 'crt':
         onToggleCrt();
-        outputNode = <p className="text-xs md:text-sm font-mono text-emerald-400">CRT scanline effect {crtEnabled ? 'disabled' : 'enabled'}!</p>;
+        outputNode = <p className="text-xs sm:text-sm font-mono text-emerald-400">CRT scanline effect {crtEnabled ? 'disabled' : 'enabled'}!</p>;
         break;
 
       case 'audio':
       case 'sound':
         onToggleSound();
-        outputNode = <p className="text-xs md:text-sm font-mono text-emerald-400">Terminal audio click sound {soundEnabled ? 'muted' : 'enabled'}!</p>;
+        outputNode = <p className="text-xs sm:text-sm font-mono text-emerald-400">Terminal audio click sound {soundEnabled ? 'muted' : 'enabled'}!</p>;
         break;
 
       case 'gui':
       case 'view':
         onSwitchToGui();
-        outputNode = <p className="text-xs md:text-sm font-mono text-emerald-400">Switching to Visual Card Portfolio Mode...</p>;
+        outputNode = <p className="text-xs sm:text-sm font-mono text-emerald-400">Switching to Visual Card Portfolio Mode...</p>;
         break;
 
       case 'clear':
@@ -414,23 +476,23 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
       case 'banner':
       case 'motd':
         outputNode = (
-          <pre className="font-mono text-xs md:text-sm leading-none overflow-x-auto select-none font-bold" style={{ color: theme.accent }}>
+          <pre className="font-mono text-[10px] sm:text-xs leading-none overflow-x-auto select-none font-bold py-1" style={{ color: theme.accent }}>
             {ASCII_BANNER}
           </pre>
         );
         break;
 
       case 'whoami':
-        outputNode = <p className="text-xs md:text-sm font-mono text-gray-300">guest@d4rxh-portfolio [Authenticated as Developer Visitor]</p>;
+        outputNode = <p className="text-xs sm:text-sm font-mono text-gray-300">guest@d4rxh-portfolio [Authenticated as Developer Visitor]</p>;
         break;
 
       case 'date':
-        outputNode = <p className="text-xs md:text-sm font-mono text-gray-300">{new Date().toString()}</p>;
+        outputNode = <p className="text-xs sm:text-sm font-mono text-gray-300">{new Date().toString()}</p>;
         break;
 
       case 'history':
         outputNode = (
-          <div className="text-xs md:text-sm font-mono space-y-1">
+          <div className="text-xs sm:text-sm font-mono space-y-1">
             <p className="font-bold text-white">Command History:</p>
             {commandHistory.map((cmd, idx) => (
               <p key={idx} className="text-gray-400">{idx + 1}. {cmd}</p>
@@ -442,32 +504,16 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
       case 'sudo':
         sounds.playErrorBeep();
         outputNode = (
-          <p className="text-xs md:text-sm font-mono text-rose-400">
+          <p className="text-xs sm:text-sm font-mono text-rose-400">
             Permission denied: User is not in the sudoers file. This incident will be reported to Darshan Rajput! 😉
           </p>
         );
         break;
 
-      case 'cat':
-        if (args.length === 0) {
-          outputNode = <p className="text-xs md:text-sm font-mono text-yellow-400">Usage: cat &lt;filename&gt; (try: cat about.txt, cat skills.json)</p>;
-        } else {
-          const file = args[0].toLowerCase();
-          if (file.includes('about')) {
-            outputNode = <p className="text-xs md:text-sm font-mono text-gray-300">{USER_PROFILE.bio}</p>;
-          } else if (file.includes('skill')) {
-            outputNode = <pre className="text-xs font-mono text-emerald-400">{JSON.stringify(SKILL_CATEGORIES, null, 2)}</pre>;
-          } else {
-            sounds.playErrorBeep();
-            outputNode = <p className="text-xs md:text-sm font-mono text-rose-400">cat: {args[0]}: No such file or directory</p>;
-          }
-        }
-        break;
-
       default:
         sounds.playErrorBeep();
         outputNode = (
-          <p className="text-xs md:text-sm font-mono text-rose-400">
+          <p className="text-xs sm:text-sm font-mono text-rose-400">
             zsh: command not found: <span className="font-bold text-white">{trimmed}</span>. Type <span className="underline cursor-pointer text-white font-bold" onClick={() => executeCommand('help')}>help</span> for available commands.
           </p>
         );
@@ -527,8 +573,8 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
     <div 
       className={`mx-auto w-full transition-all duration-300 z-10 relative flex flex-col ${
         isMaximized 
-          ? 'fixed inset-0 p-2 md:p-4 max-w-full h-full' 
-          : 'max-w-5xl h-[88vh] md:h-[82vh] rounded-2xl shadow-2xl p-2 md:p-6'
+          ? 'fixed inset-0 p-1 sm:p-3 max-w-full h-full' 
+          : 'max-w-5xl h-[88dvh] sm:h-[84vh] rounded-2xl shadow-2xl p-1.5 sm:p-4 md:p-6'
       }`}
     >
       <div 
@@ -538,106 +584,110 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
       >
         {/* Terminal Header Bar */}
         <div 
-          className="px-4 py-3 border-b flex items-center justify-between select-none z-20"
+          className="px-3 sm:px-4 py-2.5 sm:py-3 border-b flex items-center justify-between select-none z-20 shrink-0"
           style={{ background: theme.headerBg, borderColor: theme.border }}
         >
           {/* Traffic Lights */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             <button 
               onClick={() => setHistory([])}
               title="Clear Terminal" 
-              className="w-3.5 h-3.5 rounded-full bg-red-500/90 hover:bg-red-600 transition-colors cursor-pointer flex items-center justify-center text-[8px] text-red-950 font-bold opacity-80 hover:opacity-100"
+              className="w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-full bg-red-500/90 hover:bg-red-600 transition-colors cursor-pointer flex items-center justify-center text-[8px] text-red-950 font-bold opacity-80 hover:opacity-100"
             >
               ×
             </button>
             <button 
               onClick={onToggleMatrix}
               title="Toggle Matrix Rain" 
-              className="w-3.5 h-3.5 rounded-full bg-yellow-500/90 hover:bg-yellow-600 transition-colors cursor-pointer flex items-center justify-center text-[8px] text-yellow-950 font-bold opacity-80 hover:opacity-100"
+              className="w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-full bg-yellow-500/90 hover:bg-yellow-600 transition-colors cursor-pointer flex items-center justify-center text-[8px] text-yellow-950 font-bold opacity-80 hover:opacity-100"
             >
               -
             </button>
             <button 
               onClick={() => setIsMaximized(!isMaximized)}
               title="Maximize / Restore" 
-              className="w-3.5 h-3.5 rounded-full bg-emerald-500/90 hover:bg-emerald-600 transition-colors cursor-pointer flex items-center justify-center text-[8px] text-emerald-950 font-bold opacity-80 hover:opacity-100"
+              className="w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-full bg-emerald-500/90 hover:bg-emerald-600 transition-colors cursor-pointer flex items-center justify-center text-[8px] text-emerald-950 font-bold opacity-80 hover:opacity-100"
             >
               +
             </button>
           </div>
 
           {/* Title Tab */}
-          <div className="flex items-center gap-2 font-mono text-xs md:text-sm font-semibold text-gray-300 truncate px-2">
-            <TerminalIcon size={14} style={{ color: theme.accent }} />
-            <span>d4rxh@portfolio: ~ ({theme.name})</span>
+          <div className="flex items-center gap-1.5 sm:gap-2 font-mono text-xs sm:text-sm font-semibold text-gray-300 truncate px-2">
+            <TerminalIcon size={13} style={{ color: theme.accent }} />
+            <span className="truncate">d4rxh@portfolio: ~ ({theme.name})</span>
           </div>
 
           {/* Action Toolbar */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2">
             {/* Audio Toggle */}
             <button
               onClick={onToggleSound}
               title={soundEnabled ? 'Mute Sounds' : 'Enable Audio'}
-              className="p-1.5 rounded-md hover:bg-white/10 transition-colors text-gray-400 hover:text-white"
+              className="p-1 rounded-md hover:bg-white/10 transition-colors text-gray-400 hover:text-white"
             >
-              {soundEnabled ? <Volume2 size={15} style={{ color: theme.accent }} /> : <VolumeX size={15} />}
+              {soundEnabled ? <Volume2 size={14} style={{ color: theme.accent }} /> : <VolumeX size={14} />}
             </button>
 
             {/* CRT Toggle */}
             <button
               onClick={onToggleCrt}
               title={crtEnabled ? 'Disable CRT' : 'Enable CRT Scanlines'}
-              className="p-1.5 rounded-md hover:bg-white/10 transition-colors text-gray-400 hover:text-white"
+              className="p-1 rounded-md hover:bg-white/10 transition-colors text-gray-400 hover:text-white hidden sm:block"
             >
-              <Tv size={15} style={{ color: crtEnabled ? theme.accent : undefined }} />
+              <Tv size={14} style={{ color: crtEnabled ? theme.accent : undefined }} />
             </button>
 
             {/* Matrix Rain Toggle */}
             <button
               onClick={onToggleMatrix}
               title="Toggle Matrix Rain"
-              className="p-1.5 rounded-md hover:bg-white/10 transition-colors text-gray-400 hover:text-white"
+              className="p-1 rounded-md hover:bg-white/10 transition-colors text-gray-400 hover:text-white hidden sm:block"
             >
-              <Sparkles size={15} style={{ color: matrixEnabled ? theme.accent : undefined }} />
+              <Sparkles size={14} style={{ color: matrixEnabled ? theme.accent : undefined }} />
             </button>
 
             {/* Maximize Toggle */}
             <button
               onClick={() => setIsMaximized(!isMaximized)}
               title="Toggle Fullscreen"
-              className="p-1.5 rounded-md hover:bg-white/10 transition-colors text-gray-400 hover:text-white hidden sm:block"
+              className="p-1 rounded-md hover:bg-white/10 transition-colors text-gray-400 hover:text-white hidden sm:block"
             >
-              {isMaximized ? <Minimize2 size={15} /> : <Maximize2 size={15} />}
+              {isMaximized ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
             </button>
 
             {/* Switch to GUI button */}
             <button
               onClick={onSwitchToGui}
               title="Switch to GUI Portfolio View"
-              className="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium transition-all active:scale-95 ml-1"
+              className="flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium transition-all active:scale-95 ml-1"
               style={{ background: theme.badgeBg, color: theme.accent, border: `1px solid ${theme.border}` }}
             >
-              <Layout size={13} />
-              <span className="hidden sm:inline">GUI View</span>
+              <Layout size={12} />
+              <span>GUI</span>
             </button>
           </div>
         </div>
 
-        {/* Quick Command Pills for 1-Tap Navigation */}
+        {/* Quick Command Pills for 1-Tap Navigation on Phone & Desktop */}
         <div 
-          className="px-4 py-2 border-b flex items-center gap-2 overflow-x-auto select-none shrink-0"
+          className="px-3 sm:px-4 py-2 border-b flex items-center gap-1.5 sm:gap-2 overflow-x-auto select-none shrink-0 scrollbar-none"
           style={{ background: 'rgba(0, 0, 0, 0.25)', borderColor: theme.border }}
         >
-          <span className="text-[11px] text-gray-400 uppercase font-mono font-bold shrink-0">Quick Run:</span>
+          <span className="text-[10px] sm:text-[11px] text-gray-400 uppercase font-mono font-bold shrink-0">Quick Run:</span>
           {quickPills.map((p) => (
             <button
               key={p.label}
               onClick={() => executeCommand(p.cmd)}
-              className="px-2.5 py-0.5 rounded text-xs font-mono transition-all hover:scale-105 active:scale-95 shrink-0 border"
+              className="px-2.5 py-1 rounded-lg text-[11px] sm:text-xs font-mono transition-all hover:scale-105 active:scale-95 shrink-0 border whitespace-nowrap"
               style={{
-                background: 'rgba(255, 255, 255, 0.04)',
+                background: p.label.startsWith('🌸') || p.label.startsWith('🎬') || p.label.startsWith('🤖') || p.label.startsWith('🖤')
+                  ? theme.badgeBg
+                  : 'rgba(255, 255, 255, 0.04)',
                 borderColor: theme.border,
-                color: theme.text,
+                color: p.label.startsWith('🌸') || p.label.startsWith('🎬') || p.label.startsWith('🤖') || p.label.startsWith('🖤')
+                  ? theme.accent
+                  : theme.text,
               }}
             >
               {p.label}
@@ -646,7 +696,7 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
         </div>
 
         {/* Terminal Output Area */}
-        <div className="flex-1 p-4 md:p-6 overflow-y-auto space-y-3 font-mono text-xs md:text-sm select-text">
+        <div className="flex-1 p-3 sm:p-5 md:p-6 overflow-y-auto space-y-3 font-mono text-xs sm:text-sm select-text">
           {history.map((item) => (
             <div key={item.id} className="space-y-1">
               {item.command !== 'welcome' && (
@@ -661,8 +711,8 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
           ))}
 
           {/* Active Input Line */}
-          <div className="flex items-center gap-2 pt-2">
-            <span className="font-bold shrink-0 font-mono" style={{ color: theme.prompt }}>
+          <div className="flex items-center gap-1.5 sm:gap-2 pt-2 pb-4">
+            <span className="font-bold shrink-0 font-mono text-xs sm:text-sm" style={{ color: theme.prompt }}>
               d4rxh@portfolio:~$
             </span>
             <input
@@ -674,8 +724,8 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
               autoFocus
               spellCheck={false}
               autoComplete="off"
-              className="flex-1 bg-transparent border-none outline-none font-mono text-xs md:text-sm text-white caret-emerald-400 w-full"
-              placeholder="type 'help' for commands..."
+              className="flex-1 bg-transparent border-none outline-none font-mono text-xs sm:text-sm text-white w-full py-1"
+              placeholder="type 'help' or tap pills above..."
               style={{ color: theme.text }}
             />
           </div>

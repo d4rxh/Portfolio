@@ -6,31 +6,38 @@
   * {
     box-sizing: border-box;
   }
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.3);
 }
 ::-webkit-scrollbar-thumb {
   background: var(--theme-border, #374151);
   border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--theme-accent, #10b981);
 }
 
-/* CRT Scanline Effect */
+/* CRT Scanline Effect (Fixed to Viewport so it doesn't break scrolling) */
 .crt-overlay::before {
   content: " ";
   display: block;
-  position: absolute;
+  position: fixed;
   top: 0; left: 0; bottom: 0; right: 0;
-  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.04), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.04));
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.22) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.015), rgba(0, 0, 255, 0.03));
   z-index: 40;
   background-size: 100% 3px, 6px 100%;
   pointer-events: none;
@@ -39,10 +46,12 @@
 .crt-scanline::after {
   content: " ";
   display: block;
-  position: absolute;
+  position: fixed;
   top: 0; left: 0; bottom: 0; right: 0;
+  width: 100vw;
+  height: 100vh;
   background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(255, 255, 255, 0.03) 50%, rgba(0, 0, 0, 0) 100%);
-  opacity: 0.15;
+  opacity: 0.12;
   z-index: 41;
   pointer-events: none;
   animation: scan 8s linear infinite;

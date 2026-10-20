@@ -24,6 +24,7 @@ export const PINNED_PROJECTS: Project[] = [
     description: "A high-performance progressive web app for music lovers. Features falling sakura petal animations, glassmorphic UI, buffer-free playback via custom FastAPI audio proxy, and client-side IndexedDB offline caching.",
     tags: ["React 18", "TypeScript", "Vite", "FastAPI", "Redis", "TailwindCSS", "PWA", "IndexedDB"],
     githubUrl: "https://github.com/d4rxh/Kawai",
+    liveUrl: "https://sakuratify.vercel.app",
     pinned: true,
     category: "Streaming",
     features: [
@@ -41,6 +42,7 @@ export const PINNED_PROJECTS: Project[] = [
     description: "An ad-free, ultra-responsive anime streaming platform supporting multi-provider fallbacks, instant search suggestions, and automated SEO dynamic sitemap generation.",
     tags: ["React 19", "TypeScript", "Vite", "Plyr", "HLS.js", "TailwindCSS", "SEO"],
     githubUrl: "https://github.com/d4rxh/Kawai-Sakura-Flix",
+    liveUrl: "https://kawai-sakura-flix.vercel.app",
     pinned: true,
     category: "Streaming",
     features: [
@@ -58,6 +60,7 @@ export const PINNED_PROJECTS: Project[] = [
     description: "A conversational AI assistant designed with Apple Siri's futuristic glowing wave orb visualizer. Supports voice input speech recognition, text-to-speech feedback, and BYOK (Bring Your Own Key) Gemini AI integration.",
     tags: ["React", "TypeScript", "Vite", "Gemini AI", "Web Speech API", "Canvas Audio Visualizer"],
     githubUrl: "https://github.com/d4rxh/siri-gpt",
+    liveUrl: "https://siri-gpt-six.vercel.app",
     pinned: true,
     category: "AI / Bots",
     features: [
@@ -75,7 +78,7 @@ export const PINNED_PROJECTS: Project[] = [
     description: "A distraction-free, minimalist aesthetic music player combining Spotify-inspired ergonomics with neo-dark cyber aesthetics and dual-source audio discovery.",
     tags: ["React 18", "TypeScript", "Vite", "Zustand", "PWA", "IndexedDB", "TailwindCSS"],
     githubUrl: "https://github.com/d4rxh/Haruno",
-    liveUrl: "https://haruno-bice.vercel.app",
+    liveUrl: "https://haruno-music.vercel.app",
     pinned: true,
     category: "Streaming",
     features: [
@@ -186,7 +189,7 @@ export const THEMES: Record<ThemeMode, ThemeColors> = {
   matrix: {
     name: "Matrix Neon",
     bg: "#051008",
-    terminalBg: "rgba(5, 18, 10, 0.92)",
+    terminalBg: "rgba(5, 18, 10, 0.94)",
     headerBg: "#092212",
     text: "#86efac",
     accent: "#00ff66",
@@ -200,7 +203,7 @@ export const THEMES: Record<ThemeMode, ThemeColors> = {
   sakura: {
     name: "Kawai Sakura",
     bg: "#100312",
-    terminalBg: "rgba(22, 6, 24, 0.92)",
+    terminalBg: "rgba(22, 6, 24, 0.94)",
     headerBg: "#2d0b32",
     text: "#fbcfe8",
     accent: "#ff6b9d",
@@ -214,7 +217,7 @@ export const THEMES: Record<ThemeMode, ThemeColors> = {
   cyberpunk: {
     name: "Cyberpunk 2077",
     bg: "#080816",
-    terminalBg: "rgba(10, 10, 26, 0.94)",
+    terminalBg: "rgba(10, 10, 26, 0.95)",
     headerBg: "#1a1a3a",
     text: "#e0e7ff",
     accent: "#fcee0a",
@@ -228,7 +231,7 @@ export const THEMES: Record<ThemeMode, ThemeColors> = {
   dracula: {
     name: "Dracula Purple",
     bg: "#181926",
-    terminalBg: "rgba(30, 31, 45, 0.94)",
+    terminalBg: "rgba(30, 31, 45, 0.95)",
     headerBg: "#282a36",
     text: "#f8f8f2",
     accent: "#bd93f9",
@@ -242,7 +245,7 @@ export const THEMES: Record<ThemeMode, ThemeColors> = {
   nord: {
     name: "Nord Arctic",
     bg: "#1e222b",
-    terminalBg: "rgba(36, 41, 51, 0.94)",
+    terminalBg: "rgba(36, 41, 51, 0.95)",
     headerBg: "#2e3440",
     text: "#eceff4",
     accent: "#88c0d0",
@@ -256,7 +259,7 @@ export const THEMES: Record<ThemeMode, ThemeColors> = {
   amber: {
     name: "Retro CRT Amber",
     bg: "#100a02",
-    terminalBg: "rgba(22, 14, 4, 0.94)",
+    terminalBg: "rgba(22, 14, 4, 0.95)",
     headerBg: "#331c05",
     text: "#fed7aa",
     accent: "#f59e0b",

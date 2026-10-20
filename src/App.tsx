@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { THEMES } from './data/portfolioData';
 import { ThemeMode } from './types/terminal';
 import { TerminalWindow } from './components/TerminalWindow';
@@ -9,7 +9,7 @@ import { Terminal, Layout } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [currentTheme, setCurrentTheme] = useState<ThemeMode>('matrix');
-  const [crtEnabled, setCrtEnabled] = useState(true);
+  const [crtEnabled, setCrtEnabled] = useState(false); // default CRT subtle/off for cleaner readability on mobile
   const [soundEnabled, setSoundEnabled] = useState(false);
   const [matrixEnabled, setMatrixEnabled] = useState(true);
   const [viewMode, setViewMode] = useState<'terminal' | 'gui'>('terminal');
@@ -21,9 +21,14 @@ export const App: React.FC = () => {
     setSoundEnabled(!soundEnabled);
   };
 
+  // Scroll to top when switching views
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [viewMode]);
+
   return (
     <div 
-      className={`min-h-screen w-full relative flex flex-col justify-center items-center transition-colors duration-700 ${
+      className={`min-h-screen w-full relative transition-colors duration-700 ${
         crtEnabled ? 'crt-overlay crt-scanline' : ''
       }`}
       style={{ 
@@ -33,38 +38,38 @@ export const App: React.FC = () => {
         ['--theme-glow' as any]: theme.glow,
       }}
     >
-      {/* Matrix Falling Code Background */}
-      {matrixEnabled && <MatrixBackground color={theme.accent} opacity={0.25} />}
+      {/* Matrix Falling Code Background (Fixed z-0) */}
+      {matrixEnabled && <MatrixBackground color={theme.accent} opacity={0.2} />}
 
-      {/* Floating View Switcher at bottom-right */}
-      <div className="fixed bottom-4 right-4 z-50 flex items-center gap-2">
+      {/* Persistent Floating Mode Switcher Button */}
+      <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50">
         <button
           onClick={() => setViewMode(viewMode === 'terminal' ? 'gui' : 'terminal')}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono font-bold shadow-2xl backdrop-blur-md border transition-all hover:scale-105 active:scale-95"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-full text-xs font-mono font-bold shadow-2xl backdrop-blur-xl border transition-all duration-200 hover:scale-105 active:scale-95"
           style={{ 
             background: theme.headerBg, 
-            borderColor: theme.border, 
+            borderColor: theme.accent, 
             color: theme.accent,
-            boxShadow: `0 8px 32px ${theme.glow}` 
+            boxShadow: `0 8px 30px ${theme.glow}` 
           }}
         >
           {viewMode === 'terminal' ? (
             <>
-              <Layout size={15} />
+              <Layout size={16} />
               <span>Switch to GUI View</span>
             </>
           ) : (
             <>
-              <Terminal size={15} />
-              <span>Switch to Terminal</span>
+              <Terminal size={16} />
+              <span>Switch to CLI Terminal</span>
             </>
           )}
         </button>
       </div>
 
-      {/* Main View Area */}
-      <main className="w-full h-full flex flex-col items-center justify-center p-2 sm:p-4 z-10">
-        {viewMode === 'terminal' ? (
+      {/* View Content */}
+      {viewMode === 'terminal' ? (
+        <div className="w-full min-h-screen flex items-center justify-center p-2 sm:p-4 z-10 relative">
           <TerminalWindow
             currentTheme={currentTheme}
             onThemeChange={setCurrentTheme}
@@ -76,14 +81,16 @@ export const App: React.FC = () => {
             onToggleMatrix={() => setMatrixEnabled(!matrixEnabled)}
             onSwitchToGui={() => setViewMode('gui')}
           />
-        ) : (
+        </div>
+      ) : (
+        <div className="w-full min-h-screen overflow-y-auto z-10 relative">
           <GuiPortfolioView
             currentTheme={currentTheme}
             onSwitchToTerminal={() => setViewMode('terminal')}
             onExecuteCommand={() => {}}
           />
-        )}
-      </main>
+        </div>
+      )}
     </div>
   );
 };
