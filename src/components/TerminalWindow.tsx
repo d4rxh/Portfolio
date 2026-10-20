@@ -1,12 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { 
   USER_PROFILE, 
-  PINNED_PROJECTS, 
   SKILL_CATEGORIES, 
   THEMES, 
   ASCII_BANNER 
 } from '../data/portfolioData';
 import { ThemeMode, HistoryItem, Project } from '../types/terminal';
+import { useProjects } from '../hooks/useProjects';
 import { 
   Terminal as TerminalIcon, 
   Tv, 
@@ -41,6 +41,7 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
   onSwitchToGui,
 }) => {
   const theme = THEMES[currentTheme];
+  const { projects } = useProjects();
   const [inputVal, setInputVal] = useState('');
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
@@ -63,7 +64,6 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
     { label: '🎬 Try AnimeFlix', cmd: 'try anime' },
     { label: '🤖 Try Siri-GPT', cmd: 'try siri' },
     { label: '🖤 Try Haruno', cmd: 'try haruno' },
-    { label: '🌙 Try Lunagram', cmd: 'try lunagram' },
     { label: 'skills', cmd: 'skills' },
     { label: 'about', cmd: 'about' },
     { label: 'contact', cmd: 'contact' },
@@ -93,8 +93,7 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
             <button onClick={() => executeCommand('try kawai')} className="text-emerald-400 underline font-bold">Kawai</button> • 
             <button onClick={() => executeCommand('try anime')} className="text-emerald-400 underline font-bold">Sakura-Flix</button> • 
             <button onClick={() => executeCommand('try siri')} className="text-emerald-400 underline font-bold">Siri-GPT</button> • 
-            <button onClick={() => executeCommand('try haruno')} className="text-emerald-400 underline font-bold">Haruno</button> • 
-            <button onClick={() => executeCommand('try lunagram')} className="text-emerald-400 underline font-bold">Lunagram</button>
+            <button onClick={() => executeCommand('try haruno')} className="text-emerald-400 underline font-bold">Haruno</button>
           </div>
           <p className="text-gray-400 text-xs pt-0.5">
             Type <span className="font-bold underline" style={{ color: theme.accent }}>help</span> or tap any quick action below.
@@ -215,7 +214,7 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
             <div className="space-y-2 my-2 text-xs sm:text-sm font-mono">
               <p className="font-bold text-white">🚀 Quick Launch Live Project Demos:</p>
               <div className="flex flex-wrap gap-2 pt-1">
-                {PINNED_PROJECTS.filter(p => p.liveUrl).map(p => (
+                {projects.filter(p => p.liveUrl).map(p => (
                   <a
                     key={p.id}
                     href={p.liveUrl}
@@ -229,12 +228,12 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
                   </a>
                 ))}
               </div>
-              <p className="text-gray-400 text-xs mt-1">Usage: <code className="text-white">try kawai</code>, <code className="text-white">try anime</code>, <code className="text-white">try siri</code>, <code className="text-white">try haruno</code>, <code className="text-white">try lunagram</code></p>
+              <p className="text-gray-400 text-xs mt-1">Usage: <code className="text-white">try kawai</code>, <code className="text-white">try anime</code>, <code className="text-white">try siri</code>, <code className="text-white">try haruno</code></p>
             </div>
           );
         } else {
           const target = args[0].toLowerCase();
-          const match = PINNED_PROJECTS.find(p => 
+          const match = projects.find(p => 
             p.id.toLowerCase().includes(target) || 
             p.name.toLowerCase().includes(target) ||
             (target === 'anime' && p.id.includes('sakura-flix')) ||
@@ -255,7 +254,7 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
           } else {
             outputNode = (
               <p className="text-xs sm:text-sm font-mono text-rose-400">
-                Project '{args[0]}' not recognized. Try: <span className="text-white">kawai, anime, siri, haruno, lunagram</span>
+                Project '{args[0]}' not recognized. Try: <span className="text-white">kawai, anime, siri, haruno</span>
               </p>
             );
           }
@@ -268,23 +267,27 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
         outputNode = (
           <div className="space-y-4 my-3 text-xs sm:text-sm font-mono">
             <div className="flex flex-wrap items-center justify-between gap-1 border-b border-white/10 pb-2">
-              <p className="font-bold text-white">📁 Showcase & Pinned Projects ({PINNED_PROJECTS.length}):</p>
+              <p className="font-bold text-white">📁 Showcase & GitHub Repositories ({projects.length}):</p>
               <span className="text-[11px] text-gray-400">Click links to try live app or view repo</span>
             </div>
 
             <div className="grid grid-cols-1 gap-3">
-              {PINNED_PROJECTS.map((proj: Project) => (
+              {projects.map((proj: Project) => (
                 <div 
                   key={proj.id} 
                   className="p-3.5 sm:p-4 rounded-xl border transition-all hover:border-white/40"
-                  style={{ background: 'rgba(255, 255, 255, 0.03)', borderColor: theme.border }}
+                  style={{ 
+                    background: 'rgba(255, 255, 255, 0.03)', 
+                    borderColor: proj.pinned ? theme.accent : theme.border,
+                    boxShadow: proj.pinned ? `0 0 16px -6px ${theme.glow}` : undefined
+                  }}
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-1.5">
                     <div className="flex items-center gap-2">
                       <span className="font-bold text-sm sm:text-base text-white">{proj.name}</span>
                       {proj.pinned && (
                         <span className="flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: theme.badgeBg, color: theme.badgeText }}>
-                          <Star size={10} fill="currentColor" /> Pinned
+                          <Star size={10} fill="currentColor" /> Highlighted
                         </span>
                       )}
                     </div>

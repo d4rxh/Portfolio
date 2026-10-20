@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { PINNED_PROJECTS, SKILL_CATEGORIES, USER_PROFILE, THEMES } from '../data/portfolioData';
+import { SKILL_CATEGORIES, USER_PROFILE, THEMES } from '../data/portfolioData';
 import { ThemeMode, Project } from '../types/terminal';
+import { useProjects } from '../hooks/useProjects';
 import { 
   Terminal, 
   ExternalLink, 
@@ -15,7 +16,8 @@ import {
   Star,
   Copy,
   Check,
-  Play
+  Play,
+  RefreshCw
 } from 'lucide-react';
 
 interface GuiPortfolioViewProps {
@@ -29,14 +31,16 @@ export const GuiPortfolioView: React.FC<GuiPortfolioViewProps> = ({
   onSwitchToTerminal,
 }) => {
   const theme = THEMES[currentTheme];
+  const { projects, loading, refresh } = useProjects();
   const [copied, setCopied] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
 
-  const categories = ['All', 'Streaming', 'AI / Bots', 'Web Apps'];
+  // Derive unique categories dynamically
+  const categories = ['All', ...Array.from(new Set(projects.map((p) => p.category)))];
 
   const filteredProjects = selectedCategory === 'All'
-    ? PINNED_PROJECTS
-    : PINNED_PROJECTS.filter((p) => p.category === selectedCategory);
+    ? projects
+    : projects.filter((p) => p.category === selectedCategory);
 
   const handleCopyEmail = () => {
     navigator.clipboard.writeText(USER_PROFILE.email);
@@ -164,11 +168,30 @@ export const GuiPortfolioView: React.FC<GuiPortfolioViewProps> = ({
       <section className="mb-14 sm:mb-20">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8">
           <div>
-            <div className="flex items-center gap-2 mb-1.5" style={{ color: theme.accent }}>
+            <div className="flex items-center gap-2 mb-1.5 flex-wrap" style={{ color: theme.accent }}>
               <Sparkles size={16} />
-              <span className="text-xs font-bold uppercase tracking-wider">Featured Work</span>
+              <span className="text-xs font-bold uppercase tracking-wider">GitHub Live Showcase</span>
+              <span 
+                className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono border"
+                style={{ background: 'rgba(255, 255, 255, 0.05)', borderColor: theme.border, color: theme.accent }}
+                title="Automatically synced with GitHub @d4rxh"
+              >
+                <span className={`w-1.5 h-1.5 rounded-full ${loading ? 'animate-ping' : ''}`} style={{ background: theme.accent }} />
+                <span>Auto-Synced</span>
+              </span>
+              <button
+                onClick={() => refresh()}
+                disabled={loading}
+                className="p-1 rounded-md border border-white/10 hover:border-white/20 text-gray-400 hover:text-white transition-all text-xs"
+                title="Refresh repositories from GitHub"
+              >
+                <RefreshCw size={11} className={loading ? 'animate-spin' : ''} />
+              </button>
             </div>
-            <h3 className="text-xl sm:text-3xl font-bold text-white">Pinned & Showcase Projects</h3>
+            <h3 className="text-xl sm:text-3xl font-bold text-white">Featured & GitHub Repositories</h3>
+            <p className="text-xs sm:text-sm text-gray-400 mt-1">
+              Live repos from <a href="https://github.com/d4rxh" target="_blank" rel="noreferrer" className="underline hover:text-white" style={{ color: theme.accent }}>@d4rxh</a>. Pinned & showcase projects are highlighted first.
+            </p>
           </div>
 
           {/* Filter Pills */}
@@ -195,8 +218,15 @@ export const GuiPortfolioView: React.FC<GuiPortfolioViewProps> = ({
           {filteredProjects.map((project: Project) => (
             <div
               key={project.id}
-              className="rounded-2xl p-5 sm:p-6 border flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl group"
-              style={{ background: theme.terminalBg, borderColor: theme.border }}
+              className={`rounded-2xl p-5 sm:p-6 border flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl group relative ${
+                project.pinned ? 'ring-1' : ''
+              }`}
+              style={{ 
+                background: theme.terminalBg, 
+                borderColor: project.pinned ? theme.accent : theme.border,
+                boxShadow: project.pinned ? `0 0 24px -8px ${theme.glow}` : undefined,
+                ['--tw-ring-color' as any]: project.pinned ? `${theme.accent}44` : 'transparent',
+              }}
             >
               <div>
                 <div className="flex items-start justify-between gap-2 mb-2 sm:mb-3">
@@ -207,10 +237,14 @@ export const GuiPortfolioView: React.FC<GuiPortfolioViewProps> = ({
                       </h4>
                       {project.pinned && (
                         <span 
-                          className="flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0" 
-                          style={{ background: theme.badgeBg, color: theme.badgeText }}
+                          className="flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 shadow-sm" 
+                          style={{ 
+                            background: theme.badgeBg, 
+                            color: theme.badgeText,
+                            border: `1px solid ${theme.accent}66`
+                          }}
                         >
-                          <Star size={10} fill="currentColor" /> Pinned
+                          <Star size={10} fill="currentColor" /> Highlighted
                         </span>
                       )}
                     </div>

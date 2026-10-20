@@ -68,7 +68,6 @@ Designed with a responsive **Dual-Mode System** for both developers and casual v
 | **🎬 Kawai-Sakura-Flix** | Anime Streaming | [🚀 Try Sakura-Flix Live](https://kawai-sakura-flix.vercel.app) | [GitHub](https://github.com/d4rxh/Kawai-Sakura-Flix) |
 | **🤖 Siri-GPT** | AI Voice Assistant | [🚀 Try Siri-GPT Live](https://siri-gpt-six.vercel.app) | [GitHub](https://github.com/d4rxh/siri-gpt) |
 | **🖤 Haruno (春野)** | Streaming / PWA | [🚀 Try Haruno Live](https://haruno-music.vercel.app) | [GitHub](https://github.com/d4rxh/Haruno) |
-| **🌙 Lunagram** | Messaging / PWA | [🚀 Try Lunagram Live](https://lunagram.vercel.app) | [GitHub](https://github.com/d4rxh/Lunagram) |
 | **🎮 Game-Verse & Bot** | Web Platform / Bot | — | [GitHub](https://github.com/d4rxh/Game-Verse) |
 | **🕹️ Wordseek_bot** | Gaming Bot | — | [GitHub](https://github.com/d4rxh/Wordseek_bot) |
 
