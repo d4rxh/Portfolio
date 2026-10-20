@@ -22,7 +22,7 @@ const CACHE_KEY = 'd4rxh_github_repos_v2';
 const CACHE_TTL_MS = 1000 * 60 * 5; // 5 minutes cache
 
 // Curated list of repo names to pin if not otherwise flagged
-const KNOWN_PINNED_NAMES = ['kawai', 'kawai-sakura-flix', 'siri-gpt', 'haruno'];
+const KNOWN_PINNED_NAMES = ['kawai', 'kawai-sakura-flix', 'siri-gpt', 'haruno', 'fileora'];
 
 function inferCategory(repo: GitHubRepo): 'Streaming' | 'AI / Bots' | 'Web Apps' | 'Tools' {
   const name = repo.name.toLowerCase();
@@ -63,6 +63,7 @@ function inferCategory(repo: GitHubRepo): 'Streaming' | 'AI / Bots' | 'Web Apps'
 
 function inferEmoji(repo: GitHubRepo): string {
   const name = repo.name.toLowerCase();
+  if (name.includes('file') || name.includes('ora')) return '📂';
   if (name.includes('sakura') || name.includes('kawai')) return '🌸';
   if (name.includes('haruno')) return '🖤';
   if (name.includes('flix') || name.includes('anime')) return '🎬';
