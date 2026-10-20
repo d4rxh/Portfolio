@@ -63,6 +63,7 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
     { label: '🎬 Try AnimeFlix', cmd: 'try anime' },
     { label: '🤖 Try Siri-GPT', cmd: 'try siri' },
     { label: '🖤 Try Haruno', cmd: 'try haruno' },
+    { label: '🌙 Try Lunagram', cmd: 'try lunagram' },
     { label: 'skills', cmd: 'skills' },
     { label: 'about', cmd: 'about' },
     { label: 'contact', cmd: 'contact' },
@@ -92,7 +93,8 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
             <button onClick={() => executeCommand('try kawai')} className="text-emerald-400 underline font-bold">Kawai</button> • 
             <button onClick={() => executeCommand('try anime')} className="text-emerald-400 underline font-bold">Sakura-Flix</button> • 
             <button onClick={() => executeCommand('try siri')} className="text-emerald-400 underline font-bold">Siri-GPT</button> • 
-            <button onClick={() => executeCommand('try haruno')} className="text-emerald-400 underline font-bold">Haruno</button>
+            <button onClick={() => executeCommand('try haruno')} className="text-emerald-400 underline font-bold">Haruno</button> • 
+            <button onClick={() => executeCommand('try lunagram')} className="text-emerald-400 underline font-bold">Lunagram</button>
           </div>
           <p className="text-gray-400 text-xs pt-0.5">
             Type <span className="font-bold underline" style={{ color: theme.accent }}>help</span> or tap any quick action below.
@@ -227,7 +229,7 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
                   </a>
                 ))}
               </div>
-              <p className="text-gray-400 text-xs mt-1">Usage: <code className="text-white">try kawai</code>, <code className="text-white">try anime</code>, <code className="text-white">try siri</code>, <code className="text-white">try haruno</code></p>
+              <p className="text-gray-400 text-xs mt-1">Usage: <code className="text-white">try kawai</code>, <code className="text-white">try anime</code>, <code className="text-white">try siri</code>, <code className="text-white">try haruno</code>, <code className="text-white">try lunagram</code></p>
             </div>
           );
         } else {
@@ -253,7 +255,7 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
           } else {
             outputNode = (
               <p className="text-xs sm:text-sm font-mono text-rose-400">
-                Project '{args[0]}' not recognized. Try: <span className="text-white">kawai, anime, siri, haruno</span>
+                Project '{args[0]}' not recognized. Try: <span className="text-white">kawai, anime, siri, haruno, lunagram</span>
               </p>
             );
           }
