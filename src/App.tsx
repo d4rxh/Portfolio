@@ -4,22 +4,15 @@ import { ThemeMode } from './types/terminal';
 import { TerminalWindow } from './components/TerminalWindow';
 import { GuiPortfolioView } from './components/GuiPortfolioView';
 import { MatrixBackground } from './components/MatrixBackground';
-import { sounds } from './components/SoundEffects';
 import { Terminal, Layout } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [currentTheme, setCurrentTheme] = useState<ThemeMode>('matrix');
-  const [crtEnabled, setCrtEnabled] = useState(false); // default CRT subtle/off for cleaner readability on mobile
-  const [soundEnabled, setSoundEnabled] = useState(false);
+  const [crtEnabled, setCrtEnabled] = useState(false); // default CRT off for clean readability
   const [matrixEnabled, setMatrixEnabled] = useState(true);
   const [viewMode, setViewMode] = useState<'terminal' | 'gui'>('terminal');
 
   const theme = THEMES[currentTheme];
-
-  const handleToggleSound = () => {
-    sounds.enabled = !soundEnabled;
-    setSoundEnabled(!soundEnabled);
-  };
 
   // Scroll to top when switching views
   useEffect(() => {
@@ -75,8 +68,6 @@ export const App: React.FC = () => {
             onThemeChange={setCurrentTheme}
             crtEnabled={crtEnabled}
             onToggleCrt={() => setCrtEnabled(!crtEnabled)}
-            soundEnabled={soundEnabled}
-            onToggleSound={handleToggleSound}
             matrixEnabled={matrixEnabled}
             onToggleMatrix={() => setMatrixEnabled(!matrixEnabled)}
             onSwitchToGui={() => setViewMode('gui')}

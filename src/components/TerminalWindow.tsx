@@ -7,11 +7,8 @@ import {
   ASCII_BANNER 
 } from '../data/portfolioData';
 import { ThemeMode, HistoryItem, Project } from '../types/terminal';
-import { sounds } from './SoundEffects';
 import { 
   Terminal as TerminalIcon, 
-  Volume2, 
-  VolumeX, 
   Tv, 
   Sparkles, 
   Layout, 
@@ -29,8 +26,6 @@ interface TerminalWindowProps {
   onThemeChange: (theme: ThemeMode) => void;
   crtEnabled: boolean;
   onToggleCrt: () => void;
-  soundEnabled: boolean;
-  onToggleSound: () => void;
   matrixEnabled: boolean;
   onToggleMatrix: () => void;
   onSwitchToGui: () => void;
@@ -41,8 +36,6 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
   onThemeChange,
   crtEnabled,
   onToggleCrt,
-  soundEnabled,
-  onToggleSound,
   matrixEnabled,
   onToggleMatrix,
   onSwitchToGui,
@@ -59,7 +52,7 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
 
   const availableCommands = [
     'help', 'about', 'projects', 'try', 'skills', 'contact', 
-    'theme', 'matrix', 'crt', 'audio', 'gui', 'clear', 
+    'theme', 'matrix', 'crt', 'gui', 'clear', 
     'banner', 'whoami', 'history', 'date', 'sudo'
   ];
 
@@ -130,8 +123,6 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
     const trimmed = rawCmd.trim();
     if (!trimmed) return;
 
-    sounds.playEnterChime();
-
     // Add to command history list
     setCommandHistory((prev) => [...prev, trimmed]);
     setHistoryIndex(-1);
@@ -173,7 +164,6 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
                   <p><span className="font-bold text-white">theme [name]</span> - Change terminal color theme</p>
                   <p><span className="font-bold text-white">matrix</span> - Toggle falling digital rain</p>
                   <p><span className="font-bold text-white">crt</span> - Toggle retro CRT scanline effect</p>
-                  <p><span className="font-bold text-white">audio</span> - Toggle typing & chime audio clicks</p>
                   <p><span className="font-bold text-white">gui</span> - Switch to visual web card view</p>
                   <p><span className="font-bold text-white">banner</span> - Display ASCII brand banner</p>
                   <p><span className="font-bold text-white">clear</span> (or <span className="text-gray-400">cls</span>) - Clean terminal screen</p>
@@ -439,7 +429,6 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
             onThemeChange(chosen);
             outputNode = <p className="text-xs sm:text-sm font-mono text-emerald-400">Switched theme to {THEMES[chosen].name}!</p>;
           } else {
-            sounds.playErrorBeep();
             outputNode = <p className="text-xs sm:text-sm font-mono text-rose-400">Theme '{args[0]}' not recognized. Try: {Object.keys(THEMES).join(', ')}</p>;
           }
         }
@@ -453,12 +442,6 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
       case 'crt':
         onToggleCrt();
         outputNode = <p className="text-xs sm:text-sm font-mono text-emerald-400">CRT scanline effect {crtEnabled ? 'disabled' : 'enabled'}!</p>;
-        break;
-
-      case 'audio':
-      case 'sound':
-        onToggleSound();
-        outputNode = <p className="text-xs sm:text-sm font-mono text-emerald-400">Terminal audio click sound {soundEnabled ? 'muted' : 'enabled'}!</p>;
         break;
 
       case 'gui':
@@ -502,7 +485,6 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
         break;
 
       case 'sudo':
-        sounds.playErrorBeep();
         outputNode = (
           <p className="text-xs sm:text-sm font-mono text-rose-400">
             Permission denied: User is not in the sudoers file. This incident will be reported to Darshan Rajput! 😉
@@ -511,7 +493,6 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
         break;
 
       default:
-        sounds.playErrorBeep();
         outputNode = (
           <p className="text-xs sm:text-sm font-mono text-rose-400">
             zsh: command not found: <span className="font-bold text-white">{trimmed}</span>. Type <span className="underline cursor-pointer text-white font-bold" onClick={() => executeCommand('help')}>help</span> for available commands.
@@ -533,8 +514,6 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    sounds.playKeyClick();
-
     if (e.key === 'Enter') {
       executeCommand(inputVal);
     } else if (e.key === 'ArrowUp') {
@@ -620,15 +599,6 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
 
           {/* Action Toolbar */}
           <div className="flex items-center gap-1 sm:gap-2">
-            {/* Audio Toggle */}
-            <button
-              onClick={onToggleSound}
-              title={soundEnabled ? 'Mute Sounds' : 'Enable Audio'}
-              className="p-1 rounded-md hover:bg-white/10 transition-colors text-gray-400 hover:text-white"
-            >
-              {soundEnabled ? <Volume2 size={14} style={{ color: theme.accent }} /> : <VolumeX size={14} />}
-            </button>
-
             {/* CRT Toggle */}
             <button
               onClick={onToggleCrt}
@@ -660,7 +630,7 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
             <button
               onClick={onSwitchToGui}
               title="Switch to GUI Portfolio View"
-              className="flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium transition-all active:scale-95 ml-1"
+              className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium transition-all active:scale-95 ml-1"
               style={{ background: theme.badgeBg, color: theme.accent, border: `1px solid ${theme.border}` }}
             >
               <Layout size={12} />

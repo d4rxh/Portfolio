@@ -57,7 +57,6 @@ Designed with a responsive **Dual-Mode System** for both developers and casual v
   - 1-Tap command pills (`help`, `projects`, `try kawai`, `try anime`, `try siri`, `try haruno`, `skills`, `contact`, `gui`) for touchscreens.
 - **🌧️ Matrix Digital Rain Canvas**: Interactive falling code stream background tinted to the active theme.
 - **📺 Retro CRT Scanline Overlay**: Optional vintage curved scanlines and subtle phosphor flicker.
-- **🔊 Web Audio API Sound Synthesizer**: Programmatic mechanical keyboard clicks and terminal execution chimes (with mute toggle).
 
 ---
 
@@ -87,7 +86,6 @@ Designed with a responsive **Dual-Mode System** for both developers and casual v
 | `theme [name]` | Live switches terminal theme (`matrix`, `sakura`, `cyberpunk`, `dracula`, `nord`, `amber`) |
 | `matrix` | Toggles the falling code digital rain background |
 | `crt` | Toggles retro CRT scanlines overlay |
-| `audio` | Toggles keyboard typing clicks and execution sound synthesizer |
 | `gui` | Switches between CLI Terminal and Visual Card Portfolio view |
 | `banner` / `motd` | Prints Darshan's custom ASCII brand artwork |
 | `clear` / `cls` | Clears terminal history and screen |
